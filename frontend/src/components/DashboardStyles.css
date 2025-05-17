@@ -1,0 +1,91 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: lightgreen; /* Temporary */
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+  background-color: lightblue; /* Temporary */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: lightcoral; /* Temporary */
+  padding: 20px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: lightyellow; /* Temporary */
+}
+
+.top-navigation {
+  background-color: lightgray; /* Temporary */
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.welcome-message {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #555;
+  background-color: white; /* Ensure welcome message has its own background */
+  padding: 10px; /* Add some padding */
+}
+
+
+
+
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 250px; /* Adjust as needed */
+  background-color: #f0f0f0; /* Example background */
+  padding: 20px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.top-navigation {
+  background-color: #ddd; /* Example background */
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-left {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.top-right a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.welcome-message {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #555;
+}

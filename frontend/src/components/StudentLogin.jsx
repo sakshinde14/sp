@@ -1,44 +1,46 @@
 import React, { useState } from 'react';
 import './AuthStyles.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function StudentLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, SetError] = useState(''); // Corrected state setter name
+  const navigate = useNavigate();
 
-  // ... your imports ...
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setError('');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    SetError(''); // Corrected state setter name
 
-  try {
-    const response = await fetch('http://localhost:5000/api/auth/login/student', { // Updated URL
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login/student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      // Login successful - you'll likely want to store a token or session here
-      alert('Student login successful!');
-      navigate('/dashboard'); // Redirect to student dashboard
-    } else {
-      setError(data.message || 'Invalid credentials');
+      if (response.ok) {
+  alert('Student login successful!');
+  // Example: Store a token in localStorage
+  localStorage.setItem('authToken', 'someGeneratedToken');
+  navigate('/dashboard');
+}else {
+        SetError(data.message || 'Invalid credentials'); // Corrected state setter name
+      }
+    } catch (error) {
+      SetError('Failed to connect to the server. Please try again later.'); // Corrected state setter name
+      console.error('Login error:', error);
     }
-  } catch (error) {
-    setError('Failed to connect to the server. Please try again later.');
-    console.error('Login error:', error);
-  }
-};
-// ... your component ...
+  };
 
   return (
     <div className="auth-container">
       <h2 className="auth-title">Student Login</h2>
+      {error && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="loginEmail" className="form-label">Email Address:</label>
