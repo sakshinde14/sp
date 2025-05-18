@@ -8,8 +8,8 @@ function TopNavigation() {
       <div className="top-right">
         {/* We can add these later */}
         {/* <Link to="/personal-storage">Personal Storage</Link> */}
-        <Link to="/profile">Profile</Link>
-        <Link to="/logout">Logout</Link>
+        <h4 className='ppl'><Link to="/profile" ><span>Profile  </span></Link>
+        <Link to="/logout"><span>  Logout</span></Link></h4>
         {/* <button>Go Back</button> */}
       </div>
     </nav>

@@ -1,91 +1,189 @@
+/* DashboardStyles.css */
+
+/* Light Purple Theme */
+:root {
+    --primary-color: #a8dadc; /* Light cyan/blue for primary elements */
+    --secondary-color: #457b9d; /* Darker blue for accents */
+    --background-light: #f1faee; /* Very light green/white for light backgrounds */
+    --text-primary: #1d3557; /* Dark blue for primary text */
+    --text-secondary: #6c757d; /* Gray for secondary text */
+    --accent-color: #e63946; /* Red/pink for important accents */
+    --hover-color: #cce5ed; /* Lighter cyan/blue for hover effects */
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+    color: var(--text-primary);
+}
+
 .dashboard-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: lightgreen; /* Temporary */
+    max-width: none !important;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background-light); /* Light background */
 }
 
 .dashboard-content {
-  display: flex;
-  flex: 1;
-  background-color: lightblue; /* Temporary */
-}
-
-.sidebar {
-  width: 250px;
-  background-color: lightcoral; /* Temporary */
-  padding: 20px;
+    display: flex;
+    flex: 1;
+    background-color: var(--background-light); /* Light background */
 }
 
 .main-content {
-  flex: 1;
-  padding: 20px;
-  background-color: lightyellow; /* Temporary */
+    flex: 1;
+    padding: 20px;
+    background-color: var(--background-light); /* Light background */
 }
 
 .top-navigation {
-  background-color: lightgray; /* Temporary */
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background-color: var(--primary-color); /* Light purple/blue navigation */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.top-navigation a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.top-navigation a:hover {
+    color: var(--accent-color);
+}
+
+.course {
+    margin-top: 40px;
+}
+
+.ppl {
+    color: var(--text-primary); /* Ensure text color is readable */
 }
 
 .welcome-message {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #555;
-  background-color: white; /* Ensure welcome message has its own background */
-  padding: 10px; /* Add some padding */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.8em;
+    color: var(--text-primary);
+    background-color: var(--primary-color); /* Light purple/blue welcome */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-
-
-
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.search-bar-container {
+    padding: 10px 20px;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
 }
 
-.dashboard-content {
-  display: flex;
-  flex: 1;
+.search-input {
+    width: 80%; /* Adjust width as needed */
+    padding: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 1em;
+    color: var(--text-primary);
 }
 
-.sidebar {
-  width: 250px; /* Adjust as needed */
-  background-color: #f0f0f0; /* Example background */
-  padding: 20px;
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent-color); /* Highlight on focus */
+    box-shadow: 0 0 5px rgba(69, 123, 157, 0.5);
 }
 
-.main-content {
-  flex: 1;
-  padding: 20px;
+.course-list {
+    margin-top: 20px;
+    padding: 0 20px;
 }
 
-.top-navigation {
-  background-color: #ddd; /* Example background */
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.course-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    font-size: 1em;
+    transition: background-color 0.3s ease;
 }
 
-.top-left {
-  font-size: 1.5em;
-  font-weight: bold;
+.course-button:hover {
+    background-color: var(--hover-color);
 }
 
-.top-right a {
-  margin-left: 15px;
-  text-decoration: none;
-  color: #333;
+.year-list,
+.semester-list,
+.subject-list {
+    margin-top: 20px;
+    padding: 0 20px;
 }
 
-.welcome-message {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #555;
+.year-list h2,
+.semester-list h2,
+.subject-list h2 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.year-button,
+.semester-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.year-button:hover,
+.semester-button:hover {
+    background-color: var(--hover-color);
+}
+
+.subject-list div {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.subject-list div:last-child {
+    border-bottom: none;
+}
+
+.subject-list button { /* Back to Course Selection button */
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.subject-list button:hover {
+    background-color: #d32f2f; /* Darker red */
 }
