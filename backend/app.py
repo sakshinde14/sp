@@ -103,30 +103,49 @@ def login_admin():
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
-    return jsonify(courses_data), 200
+    courses = list(db[COURSE_COLLECTION].find({}, {'_id': 0}))  # Fetch all courses, exclude _id
+    return jsonify(courses), 200
 
 @app.route('/api/courses/<course_code>/years', methods=['GET'])
 def get_years(course_code):
-    courses = {
-        "BSC-CS": [1, 2, 3],
-        "BCA": [1, 2, 3],
-        "MSC-CS": [1, 2],
-        "MSC-CA": [1, 2]
-    }
-    years = courses.get(course_code, [])  # Get years or an empty list if course not found
-    return jsonify(years), 200
+    course = db[COURSE_COLLECTION].find_one({'code': course_code}, {'_id': 0, 'years': 1})  # Fetch the course, get only 'years'
+    if course:
+        years = [y['year'] for y in course.get('years', [])]  # Extract the 'year' values
+        return jsonify(years), 200
+    else:
+        return jsonify([]), 404  # Return 404 if course not found
 
 
 @app.route('/api/courses/<course_code>/years/<int:year>/semesters', methods=['GET'])
 def get_semesters(course_code, year):
-    semesters = [1, 2]  # All courses have semesters 1 and 2 per year
-    return jsonify(semesters), 200
+    course = db[COURSE_COLLECTION].find_one({'code': course_code}, {'_id': 0, 'years': 1})
+    if course:
+        year_data = next((y for y in course.get('years', []) if y['year'] == year), None)
+        if year_data:
+            semesters = [s['semester'] for s in year_data.get('semesters', [])]
+            return jsonify(semesters), 200
+        else:
+            return jsonify([]), 404
+    else:
+        return jsonify([]), 404
 
 
 @app.route('/api/courses/<course_code>/years/<int:year>/semesters/<int:semester>/subjects', methods=['GET'])
-def get_subjects_route(course_code, year, semester):
-    subjects = get_subjects(course_code, year, semester)
-    return jsonify(subjects), 200
+def get_subjects(course_code, year, semester):
+    course = db[COURSE_COLLECTION].find_one({'code': course_code}, {'_id': 0, 'years': 1})
+    if course:
+        year_data = next((y for y in course.get('years', []) if y['year'] == year), None)
+        if year_data:
+            semester_data = next((s for s in year_data.get('semesters', []) if s['semester'] == semester), None)
+            if semester_data:
+                subjects = semester_data.get('subjects', [])
+                return jsonify(subjects), 200
+            else:
+                return jsonify([]), 404
+        else:
+            return jsonify([]), 404
+    else:
+        return jsonify([]), 404
 
 
 

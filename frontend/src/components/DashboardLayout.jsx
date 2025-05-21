@@ -1,16 +1,17 @@
+// DashboardLayout.jsx
 import React, { useState, useEffect } from 'react';
 import TopNavigation from './TopNavigation';
 import './DashboardStyles.css';
 import CourseList from './CourseList';
 import WelcomeMessage from './WelcomeMessage';
-import YearList from './YearList'; // Create this component later
-import SemesterList from './SemesterList'; // Create this component later
-import SubjectList from './SubjectList'; // Create this component later
+import YearList from './YearList';
+import SemesterList from './SemesterList'; // Ensure this is the CORRECTED SemesterList.jsx
+import SubjectList from './SubjectList';
 
 function DashboardLayout() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [selectedYear, setSelectedYear] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null); // This holds the full course object
+    const [selectedYear, setSelectedYear] = useState(null);    // This holds the selected year (e.g., 1, 2, 3)
     const [selectedSemester, setSelectedSemester] = useState(null);
 
     const handleSearchChange = (event) => {
@@ -19,14 +20,15 @@ function DashboardLayout() {
     };
 
     const handleCourseSelect = (course) => {
+        // 'course' here is the full course object with 'code', 'title', 'years' etc.
         setSelectedCourse(course);
-        setSelectedYear(null);
-        setSelectedSemester(null);
+        setSelectedYear(null);       // Reset year when a new course is selected
+        setSelectedSemester(null);   // Reset semester
     };
 
     const handleYearSelect = (year) => {
         setSelectedYear(year);
-        setSelectedSemester(null);
+        setSelectedSemester(null); // Reset semester when a new year is selected
     };
 
     const handleSemesterSelect = (semester) => {
@@ -57,9 +59,15 @@ function DashboardLayout() {
                 {!selectedCourse ? (
                     <CourseList onCourseSelect={handleCourseSelect} />
                 ) : !selectedYear ? (
+                    // YearList already correctly receives courseCode
                     <YearList courseCode={selectedCourse.code} onYearSelect={handleYearSelect} />
                 ) : !selectedSemester ? (
-                    <SemesterList onSemesterSelect={handleSemesterSelect} />
+                    // *** THIS IS THE CRUCIAL CHANGE FOR SEMESTERLIST ***
+                    <SemesterList
+                        onSemesterSelect={handleSemesterSelect}
+                        courseCode={selectedCourse.code} // Pass the course code from the selectedCourse object
+                        selectedYear={selectedYear}     // Pass the selected year state
+                    />
                 ) : (
                     <SubjectList
                         courseCode={selectedCourse.code}
