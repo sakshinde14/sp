@@ -73,7 +73,7 @@ html, body {
 .form-button {
   width: 100%;
   padding: 12px;
-  background-color: #a26cfa;
+  background-color: #88bbbd;
   color: white;
   border: none;
   border-radius: 8px;
@@ -83,7 +83,8 @@ html, body {
 }
 
 .form-button:hover {
-  background-color: #8443c0;
+  background-color: #457b9d; 
+;
 }
 
 .toggle-link-container {
@@ -92,7 +93,8 @@ html, body {
 }
 
 .toggle-link {
-  color: #5f42d7;
+  color: #457b9d; /* Darker blue for accents */
+;
   text-decoration: none;
   font-weight: 500;
 }
@@ -105,4 +107,44 @@ html, body {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+/* AuthStyles.css */
+
+/* ... (your existing styles for .auth-layout, .auth-visual-side, etc.) ... */
+
+/* Styles for a general authentication success/error message popup */
+.auth-popup {
+    position: fixed; /* Fixed position relative to the viewport */
+    top: 10%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for perfect centering */
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it's above other content */
+    opacity: 0; /* Start hidden */
+    animation: fadeInOut 2.5s forwards; /* Animation for fade in and fade out */
+}
+
+/* Specific styles for success message */
+.auth-popup.success {
+    background-color: #b950b9; /* Green for success */
+}
+
+/* Specific styles for error message */
+.auth-popup.error {
+    background-color: #f44336; /* Red for error */
+}
+
+/* Fade In/Out Animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -70%); } /* Start slightly above and transparent */
+    10% { opacity: 1; transform: translate(-50%, -50%); } /* Fade in and move to position */
+    90% { opacity: 1; transform: translate(-50%, -50%); } /* Stay visible for most of the duration */
+    100% { opacity: 0; transform: translate(-50%, -70%); } /* Fade out and move up */
 }

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from courses_data import courses_data, get_subjects
 from pymongo import MongoClient
 from bcrypt import hashpw, checkpw, gensalt
@@ -12,6 +12,8 @@ ADMIN_COLLECTION = "admins"  # You might have an admin collection
 COURSE_COLLECTION = "courses"  # Add this
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'a_very_long_and_random_secret_key_here_that_is_unique_and_not_guessable' # <--- IMPORTANT!
+
 CORS(app)
 client = MongoClient(MONGO_URI)
 db = client.get_database(DB_NAME)
@@ -179,7 +181,10 @@ def search_subjects():
     results = list(db[COURSE_COLLECTION].aggregate(pipeline))
     return jsonify(results), 200
 
-
+@app.route('/api/logout', methods=['POST'])
+def logout_user():
+    session.clear() # Clears all data from the session
+    return jsonify({"message": "Successfully logged out"}), 200
 
 
 

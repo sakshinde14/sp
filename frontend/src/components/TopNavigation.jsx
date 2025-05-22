@@ -1,19 +1,21 @@
+// TopNavigation.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import './DashboardStyles.css'; // Assuming your top-navigation styles are here
 
-function TopNavigation() {
-  return (
-    <nav className="top-navigation">
-      <div className="top-left">Study Portal</div>
-      <div className="top-right">
-        {/* We can add these later */}
-        {/* <Link to="/personal-storage">Personal Storage</Link> */}
-        <h4 className='ppl'><Link to="/profile" ><span>Profile  </span></Link>
-        <Link to="/logout"><span>  Logout</span></Link></h4>
-        {/* <button>Go Back</button> */}
-      </div>
-    </nav>
-  );
+function TopNavigation({ onLogout }) { // <--- NEW PROP: Receive onLogout
+    return (
+        <nav className="top-navigation">
+            <div className="logo">Study Portal</div>
+            <div className="nav-links">
+                {/* <Link to="/profile">Profile</Link>  */}
+                {/* If you have a profile page, you'd use Link */}
+                <span>Profile</span> {/* Assuming this is just text for now */}
+                
+                {/* Add onClick handler to the Logout element */}
+                <span onClick={onLogout} style={{ cursor: 'pointer' }}>Logout</span> {/* <--- NEW ONCLICK */}
+            </div>
+        </nav>
+    );
 }
 
 export default TopNavigation;

@@ -1,28 +1,35 @@
 // DashboardLayout.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import TopNavigation from './TopNavigation';
-import './DashboardStyles.css';
+import './DashboardStyles.css'; // Ensure this contains your new message styles
 import CourseList from './CourseList';
-import WelcomeMessage from './WelcomeMessage'; // This component will be conditionally rendered
+import WelcomeMessage from './WelcomeMessage';
 import YearList from './YearList';
 import SemesterList from './SemesterList';
 import SubjectList from './SubjectList';
 import SearchResultsList from './SearchResultsList';
 
 function DashboardLayout() {
+    const navigate = useNavigate();
+
+    // Existing states
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
     const [selectedSemester, setSelectedSemester] = useState(null);
-
     const [searchResults, setSearchResults] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
     const [searchError, setSearchError] = useState(null);
 
+    // --- NEW STATE for logout message ---
+    const [logoutMessage, setLogoutMessage] = useState('');
+
     useEffect(() => {
         const delaySearch = setTimeout(async () => {
-            if (searchTerm.trim().length > 0) { // Changed threshold to > 0 (for 1 or more chars) or > 2 as per previous discussion
+            if (searchTerm.trim().length > 0) {
                 setSearchLoading(true);
                 setSearchError(null);
                 setShowSearchResults(true);
@@ -101,15 +108,55 @@ function DashboardLayout() {
         setSearchResults([]);
     };
 
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log("Successfully logged out");
+                setLogoutMessage("Successfully Logged Out!"); // Set success message
+                resetSelection(); // Clear dashboard selections
+                
+                // Delay redirection to show the message
+                setTimeout(() => {
+                    setLogoutMessage(''); // Clear message after it has been seen
+                    navigate('/login/student'); // Redirect
+                }, 2000); // Display message for 2 seconds (2000 milliseconds)
+            } else {
+                const errorData = await response.json();
+                console.error("Logout failed:", errorData);
+                setLogoutMessage(`Logout Failed: ${errorData.message || 'Unknown error'}`); // Set error message
+                setTimeout(() => {
+                    setLogoutMessage(''); // Clear message after a delay even on error
+                }, 3000); // Show error message a bit longer
+            }
+        } catch (error) {
+            console.error("Error during logout:", error);
+            setLogoutMessage(`Network Error: ${error.message}`); // Set network error message
+            setTimeout(() => {
+                setLogoutMessage('');
+            }, 3000);
+        }
+    };
+
     return (
         <div className="dashboard-container">
-            <TopNavigation />
+            <TopNavigation onLogout={handleLogout} />
             <main className="main-content">
-                {/* Conditional rendering for WelcomeMessage */}
+                {/* --- NEW: Display logout message --- */}
+                {logoutMessage && (
+                    <div className={`logout-popup ${logoutMessage.includes('Failed') || logoutMessage.includes('Error') ? 'error' : 'success'}`}>
+                        {logoutMessage}
+                    </div>
+                )}
+                {/* --- End NEW --- */}
+
                 {
-                    // Show WelcomeMessage ONLY IF:
-                    // 1. No search results are active AND
-                    // 2. No course has been selected yet (meaning we are on the initial CourseList screen)
                     !showSearchResults && !selectedCourse && <WelcomeMessage />
                 }
                 
@@ -123,7 +170,6 @@ function DashboardLayout() {
                     />
                 </div>
 
-                {/* Conditional Rendering for Search Results vs. Regular Navigation */}
                 {showSearchResults ? (
                     searchLoading ? (
                         <div className="loading-message">Searching...</div>
@@ -135,7 +181,7 @@ function DashboardLayout() {
                             onResultClick={handleSearchResultClick}
                         />
                     )
-                ) : ( // Render normal navigation if no search results are shown
+                ) : (
                     !selectedCourse ? (
                         <CourseList onCourseSelect={handleCourseSelect} />
                     ) : !selectedYear ? (

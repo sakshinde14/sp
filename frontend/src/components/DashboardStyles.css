@@ -200,3 +200,91 @@ body {
 .subject-list button:hover {
     background-color: #d32f2f; /* Darker red */
 }
+
+/* Add these styles to your DashboardStyles.css or TopNavigation's dedicated CSS file */
+
+.nav-links {
+    /* Ensure this container is also participating in stacking context */
+    position: relative; /* This is important for z-index of children sometimes */
+    z-index: 1001; /* A slightly higher z-index than its parent, just in case */
+    display: flex; /* Assuming it's a flex container for the links */
+    gap: 20px; /* Adds space between "Profile" and "Logout" */
+    align-items: center; /* Vertically align items in the middle */
+}
+
+.nav-links span { /* These styles apply to your 'Profile' and 'Logout' spans */
+    cursor: pointer; /* Makes it visually clear they are clickable */
+    padding: 5px 10px; /* Gives a slightly larger area to click on */
+    user-select: none; /* Prevents text from being highlighted on rapid clicks */
+    color: var(--text-primary); /* Use your theme variable for text color */
+    font-weight: bold; /* Example style */
+    transition: color 0.2s ease; /* Smooth transition on hover */
+}
+
+.nav-links span:hover {
+    color: var(--accent-color); /* Change color on hover, like your 'a:hover' */
+}*/
+
+/* In DashboardStyles.css */
+
+.logout-alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.logout-alert.success {
+    background-color: #d4edda; /* Light green */
+    color: #155724; /* Dark green text */
+    border: 1px solid #c3e6cb;
+}
+
+.logout-alert.error {
+    background-color: #f8d7da; /* Light red */
+    color: #721c24; /* Dark red text */
+    border: 1px solid #f5c6cb;
+}
+
+/* DashboardStyles.css */
+
+/* ... (your existing styles) ... */
+
+/* Styles for the Logout success/error message popup */
+.logout-popup {
+    position: fixed; /* Fixed position relative to the viewport */
+    top: 13.5%; /* Just below your navigation bar (adjust if nav height changes) */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for perfect centering */
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it's above other content */
+    opacity: 0; /* Start hidden */
+    animation: fadeInOut 2.5s forwards; /* Animation for fade in and fade out */
+}
+
+/* Specific styles for success message */
+.logout-popup.success {
+    background-color: #b950b9; /* Green for success */
+}
+
+/* Specific styles for error message */
+.logout-popup.error {
+    background-color: #f44336; /* Red for error */
+}
+
+/* Fade In/Out Animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-20px); } /* Start slightly above and transparent */
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); } /* Fade in and move to position */
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); } /* Stay visible for most of the duration */
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); } /* Fade out and move up */
+}
