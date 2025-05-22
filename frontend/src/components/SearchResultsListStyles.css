@@ -1,9 +1,16 @@
+/* SearchResultsListStyles.css */
+
 .search-results-container {
     margin-top: 20px;
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
+    /* --- ADD THESE TWO LINES --- */
+    max-height: 400px; /* Adjust this value as needed, e.g., 300px, 500px */
+    overflow-y: auto;  /* Adds a vertical scrollbar if content exceeds max-height */
+    /* -------------------------- */
 }
 
 .search-results-list {
