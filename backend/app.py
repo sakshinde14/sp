@@ -149,5 +149,37 @@ def get_subjects(course_code, year, semester):
 
 
 
+@app.route('/api/search/subjects', methods=['GET'])
+def search_subjects():
+    search_term = request.args.get('q', '').strip() # Get the 'q' query parameter
+    if not search_term:
+        return jsonify([]), 200 # Return empty list if no search term
+
+    # Use MongoDB's aggregation pipeline for efficient search
+    # This allows us to unwind nested arrays and search within them
+    pipeline = [
+        # Find courses where any subject MIGHT match (optional optimization if you have huge data)
+        # For now, let's just go straight to unwinding
+        {"$unwind": "$years"},
+        {"$unwind": "$years.semesters"},
+        {"$unwind": "$years.semesters.subjects"},
+        {"$match": {
+            "years.semesters.subjects": {"$regex": search_term, "$options": "i"} # Case-insensitive partial match
+        }},
+        {"$project": {
+            "_id": 0,
+            "subjectName": "$years.semesters.subjects",
+            "courseName": "$title", # 'title' is the full course name
+            "courseCode": "$code",  # We'll need the code for routing
+            "year": "$years.year",
+            "semester": "$years.semesters.semester"
+        }}
+    ]
+
+    results = list(db[COURSE_COLLECTION].aggregate(pipeline))
+    return jsonify(results), 200
+
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')  # Make it accessible from your frontend
