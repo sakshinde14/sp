@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import TopNavigation from './TopNavigation';
-import './DashboardStyles.css';
 import CourseList from './CourseList';
 import WelcomeMessage from './WelcomeMessage'; // Ensure this is correctly imported
 import YearList from './YearList';
@@ -10,10 +8,11 @@ import SemesterList from './SemesterList';
 import SubjectList from './SubjectList';
 import SearchResultsList from './SearchResultsList';
 
-function DashboardLayout() {
+import './DashboardStyles.css';
+
+function AdminDashboardLayout() {
     const navigate = useNavigate();
 
-    // Existing states for search and selection
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
@@ -23,8 +22,7 @@ function DashboardLayout() {
     const [searchLoading, setSearchLoading] = useState(false);
     const [searchError, setSearchError] = useState(null);
 
-    // State for logout message
-    const [logoutMessage, setLogoutMessage] = useState('');
+    const [adminLogoutMessage, setAdminLogoutMessage] = useState('');
 
     useEffect(() => {
         const delaySearch = setTimeout(async () => {
@@ -107,7 +105,7 @@ function DashboardLayout() {
         setSearchResults([]);
     };
 
-    const handleLogout = async () => {
+    const handleAdminLogout = async () => {
         try {
             const response = await fetch('http://localhost:5000/api/logout', {
                 method: 'POST',
@@ -117,46 +115,45 @@ function DashboardLayout() {
             });
 
             if (response.ok) {
-                console.log("Successfully logged out");
-                setLogoutMessage("Successfully Logged Out!");
+                console.log("Admin successfully logged out");
+                setAdminLogoutMessage("Admin Successfully Logged Out!");
                 localStorage.removeItem('userRole'); // Clear user role
-                // localStorage.removeItem('authToken'); // If you had a separate student token
+                // localStorage.removeItem('adminAuthToken'); // If you had a separate admin token
                 resetSelection();
-                
                 setTimeout(() => {
-                    setLogoutMessage('');
-                    navigate('/login/student');
+                    setAdminLogoutMessage('');
+                    navigate('/login/admin');
                 }, 2000);
             } else {
                 const errorData = await response.json();
-                console.error("Logout failed:", errorData);
-                setLogoutMessage(`Logout Failed: ${errorData.message || 'Unknown error'}`);
+                console.error("Admin Logout failed:", errorData);
+                setAdminLogoutMessage(`Logout Failed: ${errorData.message || 'Unknown error'}`);
                 setTimeout(() => {
-                    setLogoutMessage('');
+                    setAdminLogoutMessage('');
                 }, 3000);
             }
         } catch (error) {
-            console.error("Error during logout:", error);
-            setLogoutMessage(`Network Error: ${error.message}`);
+            console.error("Error during admin logout:", error);
+            setAdminLogoutMessage(`Network Error: ${error.message}`);
             setTimeout(() => {
-                setLogoutMessage('');
+                setAdminLogoutMessage('');
             }, 3000);
         }
     };
 
     return (
         <div className="dashboard-container">
-            <TopNavigation onLogout={handleLogout} />
+            <TopNavigation onLogout={handleAdminLogout} />
             <main className="main-content">
-                {logoutMessage && (
-                    <div className={`logout-popup ${logoutMessage.includes('Failed') || logoutMessage.includes('Error') ? 'error' : 'success'}`}>
-                        {logoutMessage}
+                {adminLogoutMessage && (
+                    <div className={`logout-popup ${adminLogoutMessage.includes('Failed') || adminLogoutMessage.includes('Error') ? 'error' : 'success'}`}>
+                        {adminLogoutMessage}
                     </div>
                 )}
 
-                {/* Welcome message for the Student Dashboard */}
+                {/* Welcome message for the Admin Dashboard */}
                 {!showSearchResults && !selectedCourse && (
-                    <WelcomeMessage message="Welcome, Student!" /> /* Correctly passing the message prop */
+                    <WelcomeMessage message="Welcome, Admin! Manage Study Materials." /> /* Correctly passing the message prop */
                 )}
                 
                 <div className="search-bar-container">
@@ -200,9 +197,16 @@ function DashboardLayout() {
                         />
                     )
                 )}
+
+                {/* Admin-specific management tools */}
+                <div className="admin-management-section" style={{ marginTop: '30px', padding: '20px', borderTop: '1px solid #eee' }}>
+                    <h3>Admin Tools:</h3>
+                    <button className="form-button" style={{ marginRight: '10px' }}>Add New Material</button>
+                    <button className="form-button">Manage Existing Materials</button>
+                </div>
             </main>
         </div>
     );
 }
 
-export default DashboardLayout;
+export default AdminDashboardLayout;
