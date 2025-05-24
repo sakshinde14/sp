@@ -3,19 +3,22 @@ import './AuthStyles.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 function StudentSignup() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate(); // For programmatic navigation
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    // Removed 'error' state, replaced by 'loginMessage' for unified handling
+    // Unified state for success/error messages
+    const [error, setError] = useState('');
+    const [SigninMessage, setSigninMessage] = useState('')
+    const navigate = useNavigate(); // For programmatic navigation
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setError(''); // Clear any previous errors
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        setSigninMessage(''); // Clear any previous message before new login attempt
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setSigninMessage('Passwords do not match');
       return;
     }
 
@@ -32,22 +35,38 @@ function StudentSignup() {
 
       if (response.ok) {
         // Signup successful
-        alert('Account created successfully! You can now log in.');
-        navigate('/login/student'); // Redirect to login page
+        setSigninMessage("Signin successful!"); // Set success message for popup
+        console.log("Signin successful:", data.message);
+        setTimeout(() => {
+          setSigninMessage(''); // Clear message after delay
+          navigate('/login/student'); // Redirect to login page
+        }, 2000); //Display message for 2 seconds  
       } else {
-        // Signup failed, display error from the server
-        setError(data.message || 'Signup failed. Please try again.');
+        setSigninMessage(`Signin failed: ${data.message || 'Invalid credentials'}`); // Set error message for popup
+        console.error("Signin failed:", data.message);
+        setTimeout(() => {
+          setSigninMessage(''); // Clear message after a longer delay
+        }, 3000); // Show error message a bit longer
       }
     } catch (error) {
-      setError('Failed to connect to the server. Please try again later.');
-      console.error('Signup error:', error);
-    }
+            setSigninMessage('Failed to connect to the server. Please try again later.'); // Network error message
+            console.error('Signin error:', error);
+            setTimeout(() => {
+                setSigninMessage('');
+            }, 3000);
+        }
   };
 
   return (
     <div className="auth-container">
       <h2 className="auth-title">Student Sign Up</h2>
-      {error && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+      {/* --- NEW: Display login message --- */}
+            {SigninMessage && (
+                <div className={`auth-popup ${SigninMessage.includes('successful') ? 'success' : 'error'}`}>
+                    {SigninMessage}
+                </div>
+            )}
+            {/* --- End NEW --- */}
       <form onSubmit={handleSignup}>
         <div className="form-group">
           <label htmlFor="signupFullName" className="form-label">Full Name:</label>

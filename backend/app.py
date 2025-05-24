@@ -91,13 +91,20 @@ def login_admin():
     if not username or not password:
         return jsonify({'message': 'Missing username or password'}), 400
 
-    admin = db[ADMIN_COLLECTION].find_one({'username': username})  # Assuming you have an 'admins' collection
+    admin = db[ADMIN_COLLECTION].find_one({'username': username})
 
     if admin:
-        stored_password = admin.get('password')
-        if stored_password and checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):  # Assuming admin passwords might be stored as plain text for now - SECURE THIS LATER!
-            return jsonify({'message': 'Admin login successful'}), 200
+        stored_password_hash = admin.get('password') # Renamed for clarity, it's the hash
+
+        # Ensure the stored hash is actually bytes and then check
+        if stored_password_hash and isinstance(stored_password_hash, bytes) and \
+           checkpw(password.encode('utf-8'), stored_password_hash):
+            session['user_id'] = username # Store admin username in session
+            session['role'] = 'admin'     # Store role in session
+            return jsonify({'message': 'Admin login successful', 'role': 'admin'}), 200
         else:
+            # This covers cases where password doesn't match,
+            # or stored_password_hash is not bytes, or is None.
             return jsonify({'message': 'Invalid credentials'}), 401
     else:
         return jsonify({'message': 'Invalid credentials'}), 401

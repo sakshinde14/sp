@@ -1,15 +1,15 @@
 // DashboardLayout.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import TopNavigation from './TopNavigation';
-import './DashboardStyles.css'; // Ensure this contains your new message styles
 import CourseList from './CourseList';
 import WelcomeMessage from './WelcomeMessage';
 import YearList from './YearList';
 import SemesterList from './SemesterList';
 import SubjectList from './SubjectList';
 import SearchResultsList from './SearchResultsList';
+
+import './DashboardStyles.css'; // Ensure this contains your new message styles
 
 function DashboardLayout() {
     const navigate = useNavigate();

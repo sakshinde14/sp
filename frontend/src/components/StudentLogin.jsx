@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './AuthStyles.css';
-// Ensure your message popup styles are available.
 
 function StudentLogin() {
     const [email, setEmail] = useState('');
@@ -54,7 +53,7 @@ function StudentLogin() {
     };
 
     return (
-        <div className="auth-container">
+                <div className="auth-container">
             <h2 className="auth-title">Student Login</h2>
 
             {/* --- NEW: Conditional rendering for the custom popup message --- */}
