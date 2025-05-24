@@ -1,10 +1,11 @@
+// DashboardLayout.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import TopNavigation from './TopNavigation';
-import './DashboardStyles.css';
+import './DashboardStyles.css'; // Ensure this contains your new message styles
 import CourseList from './CourseList';
-import WelcomeMessage from './WelcomeMessage'; // Ensure this is correctly imported
+import WelcomeMessage from './WelcomeMessage';
 import YearList from './YearList';
 import SemesterList from './SemesterList';
 import SubjectList from './SubjectList';
@@ -13,7 +14,7 @@ import SearchResultsList from './SearchResultsList';
 function DashboardLayout() {
     const navigate = useNavigate();
 
-    // Existing states for search and selection
+    // Existing states
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
@@ -23,7 +24,7 @@ function DashboardLayout() {
     const [searchLoading, setSearchLoading] = useState(false);
     const [searchError, setSearchError] = useState(null);
 
-    // State for logout message
+    // --- NEW STATE for logout message ---
     const [logoutMessage, setLogoutMessage] = useState('');
 
     useEffect(() => {
@@ -118,26 +119,25 @@ function DashboardLayout() {
 
             if (response.ok) {
                 console.log("Successfully logged out");
-                setLogoutMessage("Successfully Logged Out!");
-                localStorage.removeItem('userRole'); // Clear user role
-                // localStorage.removeItem('authToken'); // If you had a separate student token
-                resetSelection();
+                setLogoutMessage("Successfully Logged Out!"); // Set success message
+                resetSelection(); // Clear dashboard selections
                 
+                // Delay redirection to show the message
                 setTimeout(() => {
-                    setLogoutMessage('');
-                    navigate('/login/student');
-                }, 2000);
+                    setLogoutMessage(''); // Clear message after it has been seen
+                    navigate('/login/student'); // Redirect
+                }, 2000); // Display message for 2 seconds (2000 milliseconds)
             } else {
                 const errorData = await response.json();
                 console.error("Logout failed:", errorData);
-                setLogoutMessage(`Logout Failed: ${errorData.message || 'Unknown error'}`);
+                setLogoutMessage(`Logout Failed: ${errorData.message || 'Unknown error'}`); // Set error message
                 setTimeout(() => {
-                    setLogoutMessage('');
-                }, 3000);
+                    setLogoutMessage(''); // Clear message after a delay even on error
+                }, 3000); // Show error message a bit longer
             }
         } catch (error) {
             console.error("Error during logout:", error);
-            setLogoutMessage(`Network Error: ${error.message}`);
+            setLogoutMessage(`Network Error: ${error.message}`); // Set network error message
             setTimeout(() => {
                 setLogoutMessage('');
             }, 3000);
@@ -148,16 +148,19 @@ function DashboardLayout() {
         <div className="dashboard-container">
             <TopNavigation onLogout={handleLogout} />
             <main className="main-content">
+                {/* --- NEW: Display logout message --- */}
                 {logoutMessage && (
                     <div className={`logout-popup ${logoutMessage.includes('Failed') || logoutMessage.includes('Error') ? 'error' : 'success'}`}>
                         {logoutMessage}
                     </div>
                 )}
+                {/* --- End NEW --- */}
 
-                {/* Welcome message for the Student Dashboard */}
+                {/* Welcome message for the Admin Dashboard */}
                 {!showSearchResults && !selectedCourse && (
-                    <WelcomeMessage message="Welcome, Student!" /> /* Correctly passing the message prop */
+                    <WelcomeMessage message="Welcome, Student." /> /* Correctly passing the message prop */
                 )}
+                
                 
                 <div className="search-bar-container">
                     <input

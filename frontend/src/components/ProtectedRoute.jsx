@@ -41,4 +41,4 @@ function ProtectedRoute({ children, allowedRoles }) {
     return userRole && (allowedRoles ? allowedRoles.includes(userRole) : true) ? children : null;
 }
 
-export default ProtectedRout;
+export default ProtectedRoute;

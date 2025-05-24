@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './AuthStyles.css';
 // Ensure your message popup styles are available.
-// If you put them in DashboardStyles.css, you might need to import it here:
-// import '../DashboardStyles.css'; // Adjust path if necessary
 
 function StudentLogin() {
     const [email, setEmail] = useState('');
@@ -32,7 +30,8 @@ function StudentLogin() {
                 setLoginMessage("Login successful!"); // Set success message for popup
                 console.log("Login successful:", data.message);
                 localStorage.setItem('authToken', 'someGeneratedToken'); // Example: Store a token
-                
+                localStorage.setItem('userRole', 'student');
+
                 // Delay redirection to show the message
                 setTimeout(() => {
                     setLoginMessage(''); // Clear message after delay
